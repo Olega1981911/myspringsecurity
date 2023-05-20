@@ -44,7 +44,7 @@ public class DatabaseInitial {
         roleRepository.save(roleUser);
 
         User admin = new User( "Petya", "admin@mail.ru",
-                "a0UQ3N432",
+                "a0UQ3N4325",
                 setAdminRole()); // ������: admin
         User user = new User("Max", "user@mail.ru",
                 "DYmBEba8.87q",
