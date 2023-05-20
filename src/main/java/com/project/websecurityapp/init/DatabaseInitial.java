@@ -2,7 +2,8 @@ package com.project.websecurityapp.init;
 
 import com.project.websecurityapp.models.Role;
 import com.project.websecurityapp.models.User;
-import com.project.websecurityapp.repository.RoleRepository;
+
+import com.project.websecurityapp.service.RoleServiceImp;
 import com.project.websecurityapp.service.UserServiceImp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -16,11 +17,11 @@ import java.util.Set;
 public class DatabaseInitial {
 
     private final UserServiceImp userService;
-    private final RoleRepository roleRepository;
+    private final RoleServiceImp roleServiceImp;
 
-    public DatabaseInitial(UserServiceImp userService, RoleRepository roleRepository) {
+    public DatabaseInitial(UserServiceImp userService, RoleServiceImp roleServiceImp) {
         this.userService = userService;
-        this.roleRepository = roleRepository;
+        this.roleServiceImp = roleServiceImp;
     }
 
     private final Role roleAdmin = new Role("ROLE_ADMIN");
@@ -31,6 +32,7 @@ public class DatabaseInitial {
         adminRole.add(roleAdmin);
         return adminRole;
     }
+
     public Set<Role> setRoleUser() {
         Set<Role> userRole = new HashSet<>();
         userRole.add(roleUser);
@@ -40,18 +42,18 @@ public class DatabaseInitial {
     @Transactional
     @Bean
     public void addInitUsers() {
-        roleRepository.save(roleAdmin);
-        roleRepository.save(roleUser);
+        roleServiceImp.save(roleAdmin);
+        roleServiceImp.save(roleUser);
 
-        User admin = new User( "Petya", "admin@mail.ru",
-                "a0UQ3N4325",
+        User admin = new User("Alex", "admin@mail.ru",
+                "$2y$10$vPPxOzLPRzLcWKj4uPxCCe8cMiCazzt1UoFMThy7Kz9oPpXKgffau",
                 setAdminRole()); // ������: admin
         User user = new User("Max", "user@mail.ru",
-                "DYmBEba8.87q",
+                "$2y$10$duCT2yEELIt8QZoUfUNRj.fBVp2svMUTcbxi/Xo1Pno9WdNdEpzf6",
                 setRoleUser()); // ������: user
 
-        userService.loadUserByUsername(String.valueOf(admin));
-        userService.loadUserByUsername(String.valueOf(user));
+        userService.saveUser(admin);
+        userService.saveUser(user);
     }
 
 }

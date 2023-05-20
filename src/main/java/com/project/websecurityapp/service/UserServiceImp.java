@@ -5,11 +5,9 @@ import com.project.websecurityapp.models.Role;
 import com.project.websecurityapp.models.User;
 import com.project.websecurityapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,14 +18,17 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class UserServiceImp implements UserDetailsService {
+@Transactional
+public class UserServiceImp implements UserService {
 
 
     private final UserRepository userRepository;
 
+
     @Autowired
     public UserServiceImp(UserRepository userRepository) {
         this.userRepository = userRepository;
+
     }
 
     public User getUserByUsername(String username) {
@@ -55,5 +56,27 @@ public class UserServiceImp implements UserDetailsService {
         return userRepository.findAll();
     }
 
+    @Override
+    public User findOne(long id) {
+        return userRepository.findById(id).get();
+    }
 
+    @Override
+    public void saveUser(User user) {
+       // user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        user.setPassword(user.getPassword());
+        userRepository.save(user);
+    }
+
+    @Override
+    public void update(long id, User updateUser) {
+        updateUser.setId(id);
+        userRepository.save(updateUser);
+    }
+
+    @Override
+    public void deleteUser(long id) {
+        userRepository.deleteById(id);
+
+    }
 }
