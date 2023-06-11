@@ -1,39 +1,93 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-  <title>Spring Security Example</title>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
 </head>
 <body>
-<div sec:authorize="isAuthenticated()">
-  Welcome <b><span sec:authentication="name">Username</span></b>
-  &nbsp;
-  <i><span sec:authentication="principal.authorities">Roles</span></i>
-</div>
+<header>
+    <nav class="navbar navbar-light bg-dark" style="height: 7vh">
+        <div class="container-fluid">
+            <div>
+                <div class="text-white me-auto d-inline-block">
+                    <strong class="text-white" style="font-size: 1.5em" th:utext="${users.getUsername()}">
+                        Username
+                    </strong>
+                </div>
+                <div class="text-white me-auto d-inline-block">
+                    <span class="text-white" style="font-size: 1.5em">with roles: </span>
+                </div>
+                <div class="text-white me-auto d-inline-block">
+                    <span class="text-white" style="font-size: 1.5em"
+                          th:each="role : ${users.getRoles()}" th:utext="${role.getName()}">
+                        USER
+                    </span>
+                </div>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <a class="navbar-brand text-white-50 fs-20" href="/logout">Logout</a>
+            </form>
 
-<table>
-  <thead>
-  <tr>
-    <th>id</th>
-    <th>username</th>
-    <th>email</th>
-    <th>password</th>
-    <th>role</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="user : ${users}">
-    <td th:text="${user.getId()}"></td>
-    <td th:text="${user.getUsername()}"></td>
-    <td th:text="${user.getEmail()}"></td>
-    <td th:text="${user.getPassword()}"></td>
-    <td th:text="${user.getRoles()}"></td>
-  </tr>
-  </tr>
-  </tbody>
-</table>
-<br/>
-<form th:action="@{/logout}" method="post">
-  <input type="submit" value="Logout" />
-</form>
+        </div>
+    </nav>
+</header>
+<!-- основной контейнер -->
+<div class="d-flex align-items-start" style=" height: 93vh; background: #f0f0f0;">
+    <!-- боковая навигация между Admin panel и user page -->
+    <div class="col-md-3 col-xl-2 py-2" style="padding-top: 15px; flex: 1 6; height: 100%; background: white">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <!--<li class="nav-item">
+                <a href="/admin" class="nav-link" aria-current="page"
+                   th:if="${isAdminRole}">Admin</a>
+            </li>-->
+            <li class="nav-item">
+                <a href="/user" class="nav-link active" aria-current="page">User</a>
+            </li>
+        </ul>
+    </div>
+    <div class="tab-content" id="v-pills-tabContent" style="padding: 15px 25px 15px 25px; flex: 5 6; height: 100%;">
+        <div class="tab-pane show active" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">
+            <div sec:authorize="isAuthenticated()">
+                Welcome <b><span sec:authentication="users" th:text="${users.getUsername()}">Username</span></b>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title" style="margin: 5px 0">About user</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <hr style="border: 1px solid darkgrey; margin: auto">
+                        </tr>
+                        <tr>
+                            <th>id</th>
+                            <th>username</th>
+                            <th>email</th>
+                            <th>role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td th:text="${users.getId()}">id</td>
+                            <td th:text="${users.getUsername()}">username</td>
+                            <td th:text="${users.getEmail()}">email</td>
+                            <td th:text="${users.getRoles()}">role</td>
+                        </tr>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <br/>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 </body>
 </html>
