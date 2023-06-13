@@ -24,8 +24,8 @@ public class UserController {
 
     @GetMapping("/user")
     public String getUserPage(Principal principal, Model model) {
-        model.addAttribute("users", userService.getUserByUsername(principal.getName()));
-        model.addAttribute("isAdminRole", userService.getUserByUsername(principal.getName()).getRoles().contains(new Role("ROLE_ADMIN")));
+        model.addAttribute("users", userService.findByName(principal.getName()));
+        model.addAttribute("isAdminRole", userService.findByName(principal.getName()).getRoles().contains(new Role("ROLE_ADMIN")));
 
         return "user";
     }

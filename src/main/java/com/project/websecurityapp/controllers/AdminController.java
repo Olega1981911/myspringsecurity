@@ -29,7 +29,7 @@ public class AdminController {
     }
     @GetMapping("/admin")
     public String pageToViewAllUsers(ModelMap model, Principal principal) {
-        User user = userService.getUserByUsername(principal.getName());
+        User user = userService.findByName(principal.getName());
         model.addAttribute("user", user);
         model.addAttribute("allUsers", userService.findAll());
         model.addAttribute("roleUser", roleServiceImp.getAllRoles());
