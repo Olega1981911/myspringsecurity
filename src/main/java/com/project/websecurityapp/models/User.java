@@ -29,7 +29,7 @@ public class User implements UserDetails {
     private String email;
 
     @NotEmpty(message = "Password should not be empty")
-    @Column(name = "password")
+    @Column(name = "password", unique = true)
     private String password;
     @Transient
     private String passwordConfirm;
