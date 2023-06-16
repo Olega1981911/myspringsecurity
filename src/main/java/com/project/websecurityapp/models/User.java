@@ -30,6 +30,7 @@ public class User implements UserDetails {
 
     @NotEmpty(message = "Password should not be empty")
     @Column(name = "password", unique = true)
+    @Size(min=4)
     private String password;
     @Transient
     private String passwordConfirm;

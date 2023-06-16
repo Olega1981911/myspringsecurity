@@ -42,18 +42,17 @@ public class UserServiceImp implements UserService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = findByName(username);
+        User user = userRepository.getUserByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", username));
         }
-        return new User(user.getUsername(), user.getPassword(),
-                (Set<Role>) mapRolesToAuthority(user.getRoles()));
+        return new User(user.getUsername(),user.getPassword(), (Set<Role>) roles(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthority(Collection<Role> roles) {
+    private Collection<? extends GrantedAuthority> roles(Collection<Role> roles) {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @Override

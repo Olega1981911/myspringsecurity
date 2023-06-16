@@ -5,6 +5,7 @@ import com.project.websecurityapp.models.User;
 
 import com.project.websecurityapp.service.RoleServiceImp;
 import com.project.websecurityapp.service.UserServiceImp;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ public class DatabaseInitial {
     private final UserServiceImp userService;
     private final RoleServiceImp roleServiceImp;
 
+    @Autowired
     public DatabaseInitial(UserServiceImp userService, RoleServiceImp roleServiceImp) {
         this.userService = userService;
         this.roleServiceImp = roleServiceImp;
@@ -46,10 +48,10 @@ public class DatabaseInitial {
         roleServiceImp.save(roleUser);
 
         User admin = new User("Alex", "admin@mail.ru",
-                "$2y$10$vPPxOzLPRzLcWKj4uPxCCe8cMiCazzt1UoFMThy7Kz9oPpXKgffau",
+                "admin",
                 setAdminRole()); // ������: admin
         User user = new User("Max", "user@mail.ru",
-                "$2y$10$duCT2yEELIt8QZoUfUNRj.fBVp2svMUTcbxi/Xo1Pno9WdNdEpzf6",
+                "user",
                 setRoleUser()); // ������: user
 
         userService.saveUser(admin);
